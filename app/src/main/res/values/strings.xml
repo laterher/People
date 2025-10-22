@@ -15,7 +15,6 @@
   -->
 <resources>
     <string name="app_name">Lunch Tray</string>
-    <string name="back_button">Back</string>
     <string name="cancel">Cancel</string>
     <string name="choose_accompaniment">Choose Accompaniment</string>
     <string name="choose_entree">Choose Entree</string>
@@ -28,4 +27,23 @@
     <string name="tax">Tax: %s</string>
     <string name="total">Total: %s</string>
     <string name="submit">Submit</string>
+    <string name="deposit_calculator">Deposit Calculator</string>
+    <string name="initial_deposit_and_rate">Initial Deposit and Rate</string>
+    <string name="monthly_replenishment_and_period">Monthly Replenishment and Period</string>
+    <string name="summary_information">Summary Information</string>
+    <string name="back_button">Back</string>
+    <string name="calculate_deposit">Calculate Deposit</string>
+    <string name="initial_deposit">Initial Deposit</string>
+    <string name="initial_amount">Initial Amount</string>
+    <string name="annual_interest_rate">Annual Interest Rate</string>
+    <string name="annual_rate_percent">Annual Rate (%)</string>
+    <string name="monthly_replenishment">Monthly Replenishment</string>
+    <string name="monthly_amount">Monthly Amount</string>
+    <string name="period_in_months">Period in Months</string>
+    <string name="months">Months</string>
+    <string name="total_funds_received">Total Funds Received</string>
+    <string name="profit">Profit</string>
+    <string name="profit_percentage">Profit Percentage</string>
+    <string name="summary_parameters">Summary Parameters</string>
+    <string name="back_to_start">Back to Start</string>
 </resources>
