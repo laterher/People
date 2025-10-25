@@ -56,7 +56,7 @@ import kotlinx.coroutines.flow.update
 import kotlin.math.pow
 
 // Перечисление экранов приложения с заголовками (на русском, но ссылки на ресурсы оставлены для совместимости; в UI тексты переведены напрямую)
-enum class DepositScreen(@StringRes val title: Int) {
+enum class DepositScreen(@StringRes val title: Int) { // Для заголовков и экранов
     Start(title = R.string.deposit_calculator),
     Initial(title = R.string.initial_deposit_and_rate),
     Additional(title = R.string.monthly_replenishment_and_period),
@@ -75,7 +75,7 @@ data class DepositUiState(
 )
 
 // ViewModel для управления состоянием и расчётами вклада (все вычисления здесь, как указано в задании)
-class DepositViewModel : ViewModel() {
+class DepositViewModel : ViewModel() { // ViewModel - класс для хранения данных
     // Приватный поток состояния для внутреннего использования
     private val _uiState = MutableStateFlow(DepositUiState())
     // Публичный поток состояния для подписки в UI
@@ -146,11 +146,11 @@ fun DepositAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    CenterAlignedTopAppBar(
+    CenterAlignedTopAppBar( // Верхняя панель
         title = { Text(stringResource(currentScreenTitle)) },  // Заголовок экрана (оставлен с ресурсом, но в UI переведён)
         modifier = modifier,
         navigationIcon = {
-            if (canNavigateBack) {
+            if (canNavigateBack) { // Если true, то показывается кнопка назад
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -170,12 +170,12 @@ fun StartScreen(
     onStartButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Column( // Вертикальный контейнер
         modifier = modifier
             .fillMaxSize()
             .padding(dimensionResource(R.dimen.padding_medium)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Center, // Центрирует
+        horizontalAlignment = Alignment.CenterHorizontally // Центрирует
     ) {
         Button(onClick = onStartButtonClicked) {
             Text("Рассчитать вклад")  // Перевод: Calculate Deposit -> Рассчитать вклад
@@ -188,11 +188,11 @@ fun StartScreen(
  */
 @Composable
 fun InitialScreen(
+    viewModel: DepositViewModel,
     onCancelButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: DepositViewModel = viewModel()  // Получаем ViewModel
     val uiState by viewModel.uiState.collectAsState()  // Подписываемся на состояние
 
     Column(
@@ -217,25 +217,25 @@ fun InitialScreen(
         Text("Годовая процентная ставка")  // Перевод: Annual Interest Rate -> Годовая процентная ставка
         OutlinedTextField(
             value = if (uiState.rate == 0.0) "" else uiState.rate.toString(),
-            onValueChange = {
-                val rate = it.toDoubleOrNull() ?: return@OutlinedTextField
+            onValueChange = { // Парсит ввод
+                val rate = it.toDoubleOrNull() ?: return@OutlinedTextField // Обновляет ViewModel
                 viewModel.updateRate(rate)
             },
             label = { Text("Годовая ставка (%)") },  // Перевод: Annual Rate (%) -> Годовая ставка (%)
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions( // Числовая клавиатура
                 keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
+        Spacer(modifier = Modifier.height(16.dp)) // Пустое пространство для отступов
+        Row( // Горизонтальный контейнер для кнопок Отмена и Далее
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(onClick = onCancelButtonClicked) {
-                Text("Отмена")  // Перевод: Cancel -> Отмена
+                Text("Отмена")
             }
             Button(onClick = onNextButtonClicked) {
-                Text("Далее")  // Перевод: Next -> Далее
+                Text("Далее")
             }
         }
     }
@@ -246,11 +246,11 @@ fun InitialScreen(
  */
 @Composable
 fun AdditionalScreen(
+    viewModel: DepositViewModel,
     onCancelButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: DepositViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
@@ -260,26 +260,26 @@ fun AdditionalScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Ежемесячное пополнение")  // Перевод: Monthly Replenishment -> Ежемесячное пополнение
+        Text("Ежемесячное пополнение")
         OutlinedTextField(
             value = if (uiState.monthly == 0.0) "" else uiState.monthly.toString(),
             onValueChange = {
                 val amount = it.toDoubleOrNull() ?: return@OutlinedTextField
                 viewModel.updateMonthly(amount)
             },
-            label = { Text("Ежемесячная сумма") },  // Перевод: Monthly Amount -> Ежемесячная сумма
+            label = { Text("Ежемесячная сумма") },
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                 keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
-        Text("Период в месяцах")  // Перевод: Period in Months -> Период в месяцах
+        Text("Период в месяцах")
         OutlinedTextField(
             value = if (uiState.months == 0) "" else uiState.months.toString(),
             onValueChange = {
                 val months = it.toIntOrNull() ?: return@OutlinedTextField
                 viewModel.updateMonths(months)
             },
-            label = { Text("Месяцы") },  // Перевод: Months -> Месяцы
+            label = { Text("Месяцы") },
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                 keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
@@ -307,10 +307,10 @@ fun AdditionalScreen(
  */
 @Composable
 fun SummaryScreen(
+    viewModel: DepositViewModel,
     onBackButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: DepositViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
@@ -360,7 +360,7 @@ fun DepositCalculatorApp() {
             )
         }
     ) { innerPadding ->
-        NavHost(
+        NavHost( // Контейнер для навигации
             navController = navController,
             startDestination = DepositScreen.Start.name,  // Начальный экран
             modifier = Modifier.padding(innerPadding)
@@ -378,6 +378,7 @@ fun DepositCalculatorApp() {
             // Навигация на экран первоначального взноса
             composable(route = DepositScreen.Initial.name) {
                 InitialScreen(
+                    viewModel = viewModel,
                     onCancelButtonClicked = {
                         viewModel.reset()  // Сброс состояния
                         navController.popBackStack(DepositScreen.Start.name, inclusive = false)
@@ -392,6 +393,7 @@ fun DepositCalculatorApp() {
             // Навигация на экран дополнительных параметров
             composable(route = DepositScreen.Additional.name) {
                 AdditionalScreen(
+                    viewModel = viewModel,
                     onCancelButtonClicked = {
                         viewModel.reset()
                         navController.popBackStack(DepositScreen.Start.name, inclusive = false)
@@ -406,6 +408,7 @@ fun DepositCalculatorApp() {
             // Навигация на экран суммарной информации
             composable(route = DepositScreen.Summary.name) {
                 SummaryScreen(
+                    viewModel  = viewModel,
                     onBackButtonClicked = {
                         viewModel.reset()
                         navController.popBackStack(DepositScreen.Start.name, inclusive = false)
